@@ -81,7 +81,8 @@ export default function Home() {
           name: newUser.department,
         },
       };
-      setUsers((prevUsers) => [...prevUsers, newUserWithId]);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      setUsers((prevUsers) => [...prevUsers, newUserWithId] as any);
       setNewUser({ firstName: "", lastName: "", email: "", department: "" });
       toast.success("User added successfully!");
     } catch (error) {
@@ -93,7 +94,10 @@ export default function Home() {
   const deleteUser = async (id: number) => {
     try {
       await axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`);
-      setUsers((prevUsers) => prevUsers.filter((user) => user?.id !== id));
+      setUsers((prevUsers) =>
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        prevUsers.filter((user) => (user as any).id !== id)
+      );
       toast.success("User deleted successfully!");
     } catch (err) {
       setError("Error deleting user.");
@@ -126,8 +130,14 @@ export default function Home() {
           name: editUser?.department,
         },
       };
-      setUsers((prevUsers) =>
-        prevUsers.map((user) => (user.id === editUser?.id ? updatedUser : user))
+      setUsers(
+        (prevUsers) =>
+          prevUsers.map(
+            (user) =>
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              (user as any).id === editUser?.id ? updatedUser : user
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          ) as any
       );
       setEditUser(null);
       toast.success("User updated successfully!");
