@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 interface Geo {
   lat: string;
@@ -80,12 +81,9 @@ export default function Home() {
           name: newUser.department,
         },
       };
-      console.log(users);
-
       setUsers((prevUsers) => [...prevUsers, newUserWithId]);
-      console.log(users);
-
       setNewUser({ firstName: "", lastName: "", email: "", department: "" });
+      toast.success("User added successfully!");
     } catch (error) {
       setError("Error adding user.");
       console.error(error);
@@ -96,6 +94,7 @@ export default function Home() {
     try {
       await axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`);
       setUsers((prevUsers) => prevUsers.filter((user) => user?.id !== id));
+      toast.success("User deleted successfully!");
     } catch (err) {
       setError("Error deleting user.");
       console.error(err);
@@ -131,6 +130,7 @@ export default function Home() {
         prevUsers.map((user) => (user.id === editUser?.id ? updatedUser : user))
       );
       setEditUser(null);
+      toast.success("User updated successfully!");
     } catch (error) {
       setError("Error updating user.");
       console.error(error);
